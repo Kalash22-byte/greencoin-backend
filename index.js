@@ -1,3 +1,8 @@
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://greencoin-frontend.vercel.app', // ✅ Your Vercel frontend domain
+  credentials: true
+}));
 // server/index.js
 
 const express = require('express');
