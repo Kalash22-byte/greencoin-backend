@@ -14,36 +14,36 @@ dotenv.config(); // Load environment variables
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// ✅ Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// ✅ Enable CORS for Vercel + localhost (dev)
+// ✅ Enable CORS for both Vercel and local dev
 app.use(cors({
   origin: ['http://localhost:5500', 'https://greencoin-frontend.vercel.app'],
   credentials: true
 }));
 
-// ✅ Serve static files (e.g., login.html, CSS, JS)
+// ✅ Built-in body parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// ✅ Serve frontend static files from /public
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// ✅ Logger (optional)
+// ✅ Optional request logger
 app.use((req, res, next) => {
   console.log(`🧾 ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// ✅ API Routes
+// ✅ Mount API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/tree', treeRoutes);
 
-// ✅ Fallback route (root → login page)
+// ✅ Default fallback route (root = login page)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
 });
 
-// ✅ Start the server
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`✅ Server running on port ${PORT}`);
 });
